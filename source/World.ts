@@ -1,8 +1,12 @@
+import randomInt from './randomInt';
+
 import Carrot from './entities/Carrot';
 import Rabbit from './entities/Rabbit';
 import Wolf from './entities/Wolf';
 
 export default class World {
+    public carrotGrowthChance = 0.02;
+
     private tickCallbackArray: Array<Function>;
     private entities: Array<Carrot | Rabbit | Wolf>;
     private running = false;
@@ -12,7 +16,10 @@ export default class World {
 
     constructor() {
         this.tickCallbackArray = [];
-        this.entities = [];
+        this.entities = [
+            new Rabbit(randomInt(0, this.width), randomInt(0, this.height), this),
+            new Wolf(randomInt(0, this.width), randomInt(0, this.height), this),
+        ];
 
         this.tick = this.tick.bind(this);
     }
@@ -76,24 +83,24 @@ export default class World {
     }
 
     private tick(): void {
+        let state = this.getState();
         // Run the `tick` function for all entities
-        this.entities.forEach(e => e.tick());
+        for (let i = 0; i < this.entities.length; i++) {
+            this.entities[i].tick();
+        }
 
         // Grow random carrots in empty squares
-
-        // This is silly logic to test rendering
-        const x = Math.floor(Math.random() * this.width);
-        const y = Math.floor(Math.random() * this.height);
-        const e = this.getEntityAt(x, y);
-        if (!e) {
-            this.entities.push(new Carrot(x, y, this));
-        } else {
-            e.kill();
-            this.entities.push(new Rabbit(x, y, this));
+        state = this.getState();
+        for (let x = 0; x < state.length; x++) {
+            for (let y = 0; y < state[x].length; y++) {
+                if (state[x][y] === null && Math.random() < this.carrotGrowthChance) {
+                    this.entities.push(new Carrot(x, y, this));
+                }
+            }
         }
 
         // Tick is complete, fire callbacks
-        const state = this.getState();
+        state = this.getState();
         this.tickCallbackArray.forEach(t => t(state));
 
         if (this.running) {
