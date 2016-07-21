@@ -18,7 +18,12 @@
   },
   "devDependencies": {
     "awesome-typescript-loader": "^2.1.0",
+    "css-loader": "^0.23.1",
     "html-webpack-plugin": "^2.22.0",
+    "node-sass": "^3.8.0",
+    "sass-lint": "^1.8.2",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
     "tslint": "^3.13.0",
     "typescript": "^1.8.10",
     "webpack": "^1.13.1",

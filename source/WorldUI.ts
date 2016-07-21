@@ -17,6 +17,21 @@ export default class UI {
         this.world.start();
     }
 
+    private getSymbol(type: String) {
+        switch (type) {
+            case 'empty':
+                return ' ';
+            case 'carrot':
+                return 'C';
+            case 'rabbit':
+                return 'R';
+            case 'wolf':
+                return 'W';
+            default:
+                return '?';
+        }
+    }
+
     private renderUI(): void {
         this.parentElm.classList.add('ui');
         this.worldElm = document.createElement('div');
@@ -25,7 +40,18 @@ export default class UI {
     }
 
     private renderWorld(): void {
-        const lines = ['test', 'another test'];
+        const state = this.world.getState();
+        const lines = [];
+
+        for (let y = 0; state.length && y < state[0].length; y++) {
+            lines[y] = '';
+
+            for (let x = 0; x < state.length; x++) {
+                lines[y] += this.getSymbol(state[x][y]);
+            }
+        }
+
+        console.log(lines);
         this.worldElm.innerText = lines.join('\n');
     }
 }

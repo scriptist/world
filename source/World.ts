@@ -2,6 +2,8 @@ export default class World {
     private tickCallbackArray = [];
     private running = false;
     private interval = 1000;
+    private height = 10;
+    private width = 10;
 
     constructor() {
         console.log('Create world');
@@ -9,8 +11,13 @@ export default class World {
         this.tick = this.tick.bind(this);
     }
 
-    public everyTick(f: Function): void {
+    public everyTick(f: Function): Boolean {
+        if (typeof f !== 'function') {
+            return false;
+        }
+
         this.tickCallbackArray.push(f);
+        return true;
     };
 
     public start(): Boolean {
@@ -29,6 +36,17 @@ export default class World {
         }
 
         return this.running = false;
+    }
+
+    public getState(): Array<Array<String>> {
+        const state = [];
+        for (let x = 0; x < this.width; x++) {
+            state[x] = [];
+            for (let y = 0; y < this.height; y++) {
+                state[x][y] = Math.random() > 0.5 ? 'empty' : 'carrot';
+            }
+        }
+        return state;
     }
 
     private tick(): void {
