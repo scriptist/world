@@ -1,4 +1,7 @@
 import World from './World';
+import Carrot from './entities/Carrot';
+import Rabbit from './entities/Rabbit';
+import Wolf from './entities/Wolf';
 
 export default class UI {
     private parentElm: HTMLElement;
@@ -10,26 +13,24 @@ export default class UI {
         this.world = world;
 
         this.renderUI();
-        this.renderWorld();
 
         this.world.everyTick(this.renderWorld.bind(this));
 
         this.world.start();
     }
 
-    private getSymbol(type: String) {
-        switch (type) {
-            case 'empty':
-                return ' ';
-            case 'carrot':
-                return 'C';
-            case 'rabbit':
-                return 'R';
-            case 'wolf':
-                return 'W';
-            default:
-                return '?';
+    private getSymbol(e: Carrot | Rabbit | Wolf): string {
+        if (e === null) {
+            return ' ';
+        } else if (e instanceof Carrot) {
+            return 'C';
+        } else if (e instanceof Rabbit) {
+            return 'R';
+        } else if (e instanceof Wolf) {
+            return 'W';
         }
+
+        return '?';
     }
 
     private renderUI(): void {
@@ -39,8 +40,7 @@ export default class UI {
         this.parentElm.appendChild(this.worldElm);
     }
 
-    private renderWorld(): void {
-        const state = this.world.getState();
+    private renderWorld(state): void {
         const lines = [];
 
         for (let y = 0; state.length && y < state[0].length; y++) {
@@ -51,7 +51,6 @@ export default class UI {
             }
         }
 
-        console.log(lines);
         this.worldElm.innerText = lines.join('\n');
     }
 }
