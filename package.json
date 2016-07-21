@@ -1,0 +1,15 @@
+{
+  "name": "world",
+  "version": "0.0.1",
+  "description": "TypeScript implementation of: https://github.com/tegioz/world",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scriptist/world.git"
+  },
+  "author": "Michael Berman <me@scripti.st>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scriptist/world/issues"
+  },
+  "homepage": "https://github.com/scriptist/world#readme"
+}
