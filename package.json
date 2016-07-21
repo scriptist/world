@@ -11,5 +11,17 @@
   "bugs": {
     "url": "https://github.com/scriptist/world/issues"
   },
-  "homepage": "https://github.com/scriptist/world#readme"
+  "homepage": "https://github.com/scriptist/world#readme",
+  "scripts": {
+    "dev": "webpack-dev-server --progress --colors --inline",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^2.1.0",
+    "html-webpack-plugin": "^2.22.0",
+    "tslint": "^3.13.0",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
 }
