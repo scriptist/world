@@ -1,4 +1,6 @@
 .world {
+    $entity-size: 5px;
+
     .row {
         &::before {
             display: table;
@@ -9,8 +11,8 @@
 
     .entity {
         display: block;
-        width: 10px;
-        height: 10px;
+        width: $entity-size;
+        height: $entity-size;
         float: left;
 
         &.entity--multiple {

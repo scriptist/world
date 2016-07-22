@@ -5,12 +5,11 @@ import Wolf from './entities/Wolf';
 
 export default class UI {
     private parentElm: HTMLElement;
-    private worldElm: HTMLElement;
     private worldElms: Array<Array<HTMLElement>>;
     private world: World;
 
-    private height = 80;
-    private width = 80;
+    private height = 100;
+    private width = 100;
 
     constructor(elm: HTMLElement, world: World) {
         this.parentElm = elm;
