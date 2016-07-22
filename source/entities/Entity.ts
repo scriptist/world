@@ -80,10 +80,24 @@ export default class Entity {
         return !(x < 0 || y < 0 || x >= this.world.width || y >= this.world.height);
     }
 
+    private checkCollision(x: number, y: number): boolean {
+        const entities = this.world.getEntitiesAt(x, y);
+
+        return entities.reduce((p, e) => {
+            // TODO: Don't do this! Anything but this!
+            return p && e.constructor !== this.constructor && e.constructor.name !== 'Wolf';
+        }, true);
+    }
+
+    private checkMove(x: number, y: number): boolean {
+        return this.checkBounds(x, y)
+            && this.checkCollision(x, y);
+    }
+
     private movePriority(deltas: Array<IDelta>): boolean {
         for (let i = 0; i < deltas.length; i++) {
             const delta = deltas[i];
-            if (this.checkBounds(this.x + delta.x, this.y + delta.y)) {
+            if (this.checkMove(this.x + delta.x, this.y + delta.y)) {
                 this.x += delta.x;
                 this.y += delta.y;
                 return true;

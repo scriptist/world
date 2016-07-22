@@ -35,13 +35,8 @@ export default class World {
     public restart(): boolean {
         this.entities = [];
         const area = this.height * this.width;
-        const carrots = area * 0.1;
         const rabbits = area * 0.05;
         const wolves = area * 0.01;
-
-        for (let i = 0; i < carrots; i++) {
-            this.addEntity(new Carrot(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this));
-        }
 
         for (let i = 0; i < rabbits; i++) {
             this.addEntity(new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this));
