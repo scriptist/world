@@ -14,21 +14,16 @@ export default class World {
     private tickCallbackArray: Array<Function>;
     private entities: Array<Carrot | Rabbit | Wolf>;
     private running = false;
-    private interval = 100;
+    private interval = 16;
 
     constructor() {
         this.tickCallbackArray = [];
-        this.entities = [
-            new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
-            new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
-            new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
-            new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
-        ];
+        this.entities = [];
 
         this.tick = this.tick.bind(this);
     }
 
-    public everyTick(f: Function): Boolean {
+    public everyTick(f: Function): boolean {
         if (typeof f !== 'function') {
             return false;
         }
@@ -37,7 +32,29 @@ export default class World {
         return true;
     };
 
-    public start(): Boolean {
+    public restart(): boolean {
+        this.entities = [];
+        const area = this.height * this.width;
+        const carrots = area * 0.1;
+        const rabbits = area * 0.05;
+        const wolves = area * 0.01;
+
+        for (let i = 0; i < carrots; i++) {
+            this.addEntity(new Carrot(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this));
+        }
+
+        for (let i = 0; i < rabbits; i++) {
+            this.addEntity(new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this));
+        }
+
+        for (let i = 0; i < wolves; i++) {
+            this.addEntity(new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this));
+        }
+
+        return this.start();
+    }
+
+    public start(): boolean {
         if (this.running) {
             return false;
         }
@@ -47,7 +64,7 @@ export default class World {
         return true;
     }
 
-    public stop(): Boolean {
+    public stop(): boolean {
         if (!this.running) {
             return false;
         }
