@@ -11,6 +11,7 @@
 
     .entity {
         display: block;
+        background: #dfa;
         width: $entity-size;
         height: $entity-size;
         float: left;
@@ -24,7 +25,7 @@
         }
 
         &.entity--rabbit {
-            background: brown;
+            background: #853;
         }
 
         &.entity--wolf {
