@@ -6,19 +6,21 @@ import Wolf from './entities/Wolf';
 
 export default class World {
     public carrotGrowthChance = 0.02;
+    public carrotHealthValue = 2;
+    public rabbitHealthValue = 6;
+    public height = 10;
+    public width = 10;
 
     private tickCallbackArray: Array<Function>;
     private entities: Array<Carrot | Rabbit | Wolf>;
     private running = false;
     private interval = 1000;
-    private height = 10;
-    private width = 10;
 
     constructor() {
         this.tickCallbackArray = [];
         this.entities = [
-            new Rabbit(randomInt(0, this.width), randomInt(0, this.height), this),
-            new Wolf(randomInt(0, this.width), randomInt(0, this.height), this),
+            new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
+            new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
         ];
 
         this.tick = this.tick.bind(this);
@@ -51,28 +53,45 @@ export default class World {
         return this.running = false;
     }
 
-    public getEntityAt(x: number, y: number): Carrot | Rabbit | Wolf {
+    public getClosest(Type: Function, x: number, y: number): Carrot | Rabbit | Wolf {
+        return this.entities.reduce((p, e) => {
+            if (!(e instanceof Type)) {
+                return p;
+            }
+            if (!p || this.getDistance(x, y, e.x, e.y) < this.getDistance(x, y, p.x, p.y)) {
+                return e;
+            }
+            return p;
+        }, null);
+    }
+
+    public getDistance(x1: number, y1: number, x2: number, y2: number): number {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
+    public getEntitiesAt(x: number, y: number): Array<Carrot | Rabbit | Wolf> {
+        const entities: Array<Carrot | Rabbit | Wolf> = [];
         for (let i = 0; i < this.entities.length; i++) {
             const e = this.entities[i];
             if (e.x === x && e.y === y) {
-                return e;
+                entities.push(e);
             }
         }
 
-        return null;
+        return entities;
     }
 
-    public getState(): Array<Array<String>> {
+    public getState(): Array<Array<Array<Carrot | Rabbit | Wolf>>> {
         const state = [];
         for (let x = 0; x < this.width; x++) {
             state[x] = [];
             for (let y = 0; y < this.height; y++) {
-                state[x][y] = null;
+                state[x][y] = [];
             }
         }
 
         this.entities.forEach(e => {
-            state[e.x][e.y] = e;
+            state[e.x][e.y].push(e);
         });
 
         return state;
@@ -93,7 +112,7 @@ export default class World {
         state = this.getState();
         for (let x = 0; x < state.length; x++) {
             for (let y = 0; y < state[x].length; y++) {
-                if (state[x][y] === null && Math.random() < this.carrotGrowthChance) {
+                if (state[x][y].length === 0 && Math.random() < this.carrotGrowthChance) {
                     this.entities.push(new Carrot(x, y, this));
                 }
             }

@@ -1,23 +1,14 @@
 import World from '../World';
+import Entity from './Entity';
 
-export default class Carrot {
-    public x: number;
-    public y: number;
-    public world: World;
-    public alive = true;
-
+export default class Carrot extends Entity {
     constructor(x: number, y: number, world: World) {
-        this.x = x;
-        this.y = y;
-        this.world = world;
+        super(x, y, world);
+
+        this.health = Infinity;
     }
 
     public tick(): void {
         return;
-    }
-
-    public kill(): void {
-        this.alive = false;
-        this.world.removeEntity(this);
     }
 }

@@ -1,23 +1,26 @@
-import World from '../World';
+import Entity from './Entity';
+import Rabbit from './Rabbit';
 
-export default class Wolf {
-    public x: number;
-    public y: number;
-    public world: World;
-    public alive = true;
-
-    constructor(x: number, y: number, world: World) {
-        this.x = x;
-        this.y = y;
-        this.world = world;
-    }
-
+export default class Wolf extends Entity {
     public tick(): void {
-        return;
-    }
+        const closestRabbit = this.world.getClosest(Rabbit, this.x, this.y);
+        if (closestRabbit) {
+            this.moveTowards(closestRabbit.x, closestRabbit.y);
+        } else {
+            this.moveRandom();
+        }
 
-    public kill(): void {
-        this.alive = false;
-        this.world.removeEntity(this);
+        const sharedEntities = this.world.getEntitiesAt(this.x, this.y);
+        sharedEntities.forEach(e => {
+            if (e instanceof Rabbit) {
+                e.kill();
+                this.health += this.world.rabbitHealthValue;
+            }
+        });
+
+        this.checkHealth();
+        console.log(this);
+
+        return;
     }
 }

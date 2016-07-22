@@ -19,14 +19,16 @@ export default class UI {
         this.world.start();
     }
 
-    private getSymbol(e: Carrot | Rabbit | Wolf): string {
-        if (e === null) {
+    private getSymbol(entities: Array<Carrot | Rabbit | Wolf>): string {
+        if (entities.length === 0) {
             return ' ';
-        } else if (e instanceof Carrot) {
+        } else if (entities.length > 1) {
+            return 'O';
+        } else if (entities[0] instanceof Carrot) {
             return 'C';
-        } else if (e instanceof Rabbit) {
+        } else if (entities[0] instanceof Rabbit) {
             return 'R';
-        } else if (e instanceof Wolf) {
+        } else if (entities[0] instanceof Wolf) {
             return 'W';
         }
 
