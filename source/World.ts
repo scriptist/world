@@ -5,21 +5,23 @@ import Rabbit from './entities/Rabbit';
 import Wolf from './entities/Wolf';
 
 export default class World {
-    public carrotGrowthChance = 0.02;
-    public carrotHealthValue = 2;
-    public rabbitHealthValue = 6;
-    public height = 10;
-    public width = 10;
+    public carrotGrowthChance = 0.01;
+    public carrotHealthValue = 5;
+    public rabbitHealthValue = 8;
+    public height = 40;
+    public width = 40;
 
     private tickCallbackArray: Array<Function>;
     private entities: Array<Carrot | Rabbit | Wolf>;
     private running = false;
-    private interval = 1000;
+    private interval = 100;
 
     constructor() {
         this.tickCallbackArray = [];
         this.entities = [
             new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
+            new Rabbit(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
+            new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
             new Wolf(randomInt(0, this.width - 1), randomInt(0, this.height - 1), this),
         ];
 
@@ -51,6 +53,10 @@ export default class World {
         }
 
         return this.running = false;
+    }
+
+    public addEntity(e: Carrot | Rabbit | Wolf): void {
+        this.entities.push(e);
     }
 
     public getClosest(Type: Function, x: number, y: number): Carrot | Rabbit | Wolf {
@@ -102,14 +108,13 @@ export default class World {
     }
 
     private tick(): void {
-        let state = this.getState();
         // Run the `tick` function for all entities
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].tick();
         }
 
         // Grow random carrots in empty squares
-        state = this.getState();
+        let state = this.getState();
         for (let x = 0; x < state.length; x++) {
             for (let y = 0; y < state[x].length; y++) {
                 if (state[x][y].length === 0 && Math.random() < this.carrotGrowthChance) {
@@ -121,6 +126,12 @@ export default class World {
         // Tick is complete, fire callbacks
         state = this.getState();
         this.tickCallbackArray.forEach(t => t(state));
+
+        console.log({
+            Carrots: this.entities.filter(e => e instanceof Carrot).length,
+            Rabbits: this.entities.filter(e => e instanceof Rabbit).length,
+            Wolves: this.entities.filter(e => e instanceof Wolf).length,
+        });
 
         if (this.running) {
             setTimeout(this.tick, this.interval);

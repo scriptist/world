@@ -1,6 +1,10 @@
 import World from '../World';
 import shuffleArray from '../shuffleArray';
 
+import Carrot from './Carrot';
+import Rabbit from './Rabbit';
+import Wolf from './Wolf';
+
 interface IDelta {
     x: number;
     y: number;
@@ -9,6 +13,7 @@ interface IDelta {
 export default class Entity {
     public x: number;
     public y: number;
+    public baseHealth: number;
     public health: number;
     public world: World;
     public alive = true;
@@ -18,16 +23,23 @@ export default class Entity {
         this.y = y;
         this.world = world;
 
-        this.health = 10;
+        this.health = this.baseHealth = 10;
     }
 
     public checkHealth(): void {
         if (--this.health < 0) {
             this.kill();
-        } else if (this.health > 20) {
-            // TODO: Reproduce
+        } else if (this.health >= this.baseHealth * 2) {
+            // Reproduce
+            const child = this.duplicate();
+            this.world.addEntity(child);
+            child.moveRandom();
             this.health = Math.floor(this.health / 2);
         }
+    }
+
+    public duplicate(): Carrot | Rabbit | Wolf {
+        return null;
     }
 
     public kill(): void {

@@ -8,6 +8,10 @@ export default class Carrot extends Entity {
         this.health = Infinity;
     }
 
+    public duplicate(): Carrot {
+        return new Carrot(this.x, this.y, this.world);
+    }
+
     public tick(): void {
         return;
     }

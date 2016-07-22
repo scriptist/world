@@ -2,6 +2,10 @@ import Carrot from './Carrot';
 import Entity from './Entity';
 
 export default class Rabbit extends Entity {
+    public duplicate(): Rabbit {
+        return new Rabbit(this.x, this.y, this.world);
+    }
+
     public tick(): void {
         const closestCarrot = this.world.getClosest(Carrot, this.x, this.y);
         if (closestCarrot) {
@@ -19,7 +23,6 @@ export default class Rabbit extends Entity {
         });
 
         this.checkHealth();
-        console.log(this);
 
         return;
     }
